@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'c5!!-^1$4ls%%2580+r-m!3qd1t_se#jy_cq7dqo$d(rc#*m18'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -69,7 +67,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'blogproject.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -79,7 +76,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -99,20 +95,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'zh-hans'  # 把英文改为中文
+
+TIME_ZONE = 'Asia/Shanghai'  # 把国际时区改为中国时区
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
+USE_TZ = False  # 把使用时区改为False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
