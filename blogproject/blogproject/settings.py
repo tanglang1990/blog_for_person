@@ -122,3 +122,5 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'blog.User'
 
 TITLE = 'Ten老师的网络日志'
+
+PER_PAGE = 2

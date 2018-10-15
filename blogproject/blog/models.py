@@ -1,6 +1,8 @@
+import markdown
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import CASCADE
+from django.utils.html import strip_tags
 
 
 class User(AbstractUser):
@@ -46,9 +48,28 @@ class Article(models.Model):
     class Meta:
         verbose_name = '文章'
         verbose_name_plural = verbose_name
+        ordering = ['-created_time']
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.excerpt:
+            md = markdown.Markdown(extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+            ])
+            self.excerpt = strip_tags(md.convert(self.content))[:54]
+        super(Article, self).save(*args, **kwargs)
+
+    def md_content(self):
+        return markdown.markdown(
+            self.content,
+            extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+                'markdown.extensions.toc',
+            ])
 
 
 class Comment(models.Model):

@@ -10,7 +10,7 @@
             <a href="">阅读({{ article.views }})</a>  <a href="">评论({{ article.comment_count }})</a>
           </span>
       </div>
-      <p>{{ article.content }}
+      <p>{{ article.excerpt }}
       </p>
       <div>
         <a href="{% url 'blog:detail' article.pk %}" class="more-link">继续阅读</a>
@@ -20,7 +20,15 @@
   {% empty %}
     <div>暂时还没有文章</div>
   {% endfor %}
-  <nav class="margin-tb-1 text-center">
-    <a href="#">上一页</a><strong> 2 </strong><a href="#">下一页</a>
-  </nav>
+  {% if article_list.has_other_pages %}
+    <nav class="margin-tb-1 text-center">
+      {% if article_list.has_previous %}
+        <a href="?page={{ article_list.previous_page_number }}">上一页</a>
+      {% endif %}
+      <strong> 2 </strong>
+      {% if article_list.has_next %}
+        <a href="?page={{ article_list.next_page_number }}">下一页</a>
+      {% endif %}
+    </nav>
+  {% endif %}
 {% endblock %}

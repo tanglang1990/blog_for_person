@@ -16,5 +16,5 @@ class UserAdmin(_UserAdmin):
 
 
 admin.site.register(Article, ArticleAdmin)
-admin.site.register([Tag, Category, Comment])
 admin.site.register(User, UserAdmin)
+admin.site.register([Tag, Category, Comment])
