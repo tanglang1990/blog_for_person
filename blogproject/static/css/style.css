@@ -1,0 +1,28 @@
+    body {
+      background-color: #f5f5d5;
+    }
+
+    a {
+      color: #556677;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #4e86fe;
+    }
+
+    .margin-tb-1 {
+      margin: 1rem 0;
+    }
+
+    .margin-tb-2 {
+      margin: 2rem 0
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0.5rem;
+    }
