@@ -13,6 +13,9 @@ class User(AbstractUser):
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='名称')
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = '类别'
         verbose_name_plural = verbose_name
@@ -20,6 +23,9 @@ class Category(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, verbose_name='名称')
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = '标签'
@@ -38,5 +44,22 @@ class Article(models.Model):
     author = models.ForeignKey(User, on_delete=CASCADE, verbose_name='作者')
 
     class Meta:
-        verbose_name = '标签'
+        verbose_name = '文章'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.title
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=CASCADE, verbose_name='用户')
+    article = models.ForeignKey('Article', on_delete=CASCADE, verbose_name='文章')
+    content = models.TextField(verbose_name='内容')
+    created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+
+    class Meta:
+        verbose_name = '评论'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.content

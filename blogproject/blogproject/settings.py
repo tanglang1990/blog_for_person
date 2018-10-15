@@ -119,5 +119,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-
 AUTH_USER_MODEL = 'blog.User'
+
+TITLE = 'Ten老师的网络日志'

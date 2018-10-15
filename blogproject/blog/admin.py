@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as _UserAdmin
 
-from .models import Article, Category, Tag, User
+from .models import Article, Category, Tag, User, Comment
 
 
 class ArticleAdmin(admin.ModelAdmin):
@@ -14,6 +14,7 @@ class UserAdmin(_UserAdmin):
         self.list_display = self.list_display + ('nickname',)
         self.list_filter = self.list_display + ('nickname',)
 
+
 admin.site.register(Article, ArticleAdmin)
-admin.site.register(Category)
+admin.site.register([Tag, Category, Comment])
 admin.site.register(User, UserAdmin)

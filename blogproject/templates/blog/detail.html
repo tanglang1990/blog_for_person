@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block page_title %}{{ article.title }}{% endblock %}
+{% block main %}
+  <div class="text-center margin-tb-1">
+  {{ article.author }} {{ article.created_time }} 阅读({{ article.views }}) 评论({{ article.comment_set.count }})
+  </div>
+  <article>
+    {{ article.content }}
+  </article>
+   <hr/>
+  <div>
+  <h5>评论列表, 共{{ article.comment_set.count }}条评论</h5>
+  </div>
+{% endblock %}
