@@ -13,9 +13,17 @@ class User(AbstractUser):
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name='名称')
 
+    class Meta:
+        verbose_name = '类别'
+        verbose_name_plural = verbose_name
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, verbose_name='名称')
+
+    class Meta:
+        verbose_name = '标签'
+        verbose_name_plural = verbose_name
 
 
 class Article(models.Model):
@@ -28,3 +36,7 @@ class Article(models.Model):
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='标签')
     views = models.PositiveIntegerField(default=0, verbose_name='浏览次数')
     author = models.ForeignKey(User, on_delete=CASCADE, verbose_name='作者')
+
+    class Meta:
+        verbose_name = '标签'
+        verbose_name_plural = verbose_name
