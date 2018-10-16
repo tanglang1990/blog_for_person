@@ -7,7 +7,8 @@
       <h3>{{ article.title }}</h3>
       <div>
           <span>{{ article.author }} {{ article.created_time }}
-            <a href="">阅读({{ article.views }})</a>  <a href="">评论({{ article.comment_count }})</a>
+            <a href="{% url 'blog:detail' article.pk %}">阅读({{ article.views }})</a>
+            <a href="{% url 'blog:detail' article.pk %}#coment">评论({{ article.comment_set.count  }})</a>
           </span>
       </div>
       <p>{{ article.excerpt }}

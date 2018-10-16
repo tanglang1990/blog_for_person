@@ -32,11 +32,15 @@ ul {
   padding-left: 0.5rem;
 }
 
+.no-padding-left {
+    padding-left: 0;
+}
+
 .search-form{
   margin-top: 0.5rem;
 }
 
-.input-form  input {
+.input-form  input,textarea {
   display: block;
   width: 100%;
   padding: .375rem .75rem;
@@ -56,4 +60,17 @@ ul {
 
 .errorlist {
    color: #d44950;
+}
+
+.comment {
+   border-bottom: 1px dashed #d3d3d3;
+   padding-bottom: 0.5rem;
+}
+
+.font-size-8{
+    font-size: 0.8rem;
+}
+
+.font-size-10{
+    font-size: 1rem;
 }

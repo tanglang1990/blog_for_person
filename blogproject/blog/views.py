@@ -1,7 +1,10 @@
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
+from django.shortcuts import render, get_object_or_404, redirect
 
+from blog.forms import CommentForm
 from blog.models import Article
 
 
@@ -16,5 +19,28 @@ def index(request):
 
 def detail(request, pk):
     article = get_object_or_404(Article, pk=pk)
-
+    article.increase_views()
     return render(request, 'blog/detail.html', context={'article': article})
+
+
+@login_required
+def comment(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.instance.article = article
+            form.instance.user = request.user
+            form.save()
+            return redirect(article)
+    else:
+        form = CommentForm()
+    return render(
+        request, 'users/base_form.html', {'title': f'{article.title}-留言', 'form': form})
+
+
+def search(request):
+    q = request.GET.get('q')
+    article_list = Article.objects.filter(
+        Q(title__icontains=q) | Q(content__icontains=q) | Q(excerpt__icontains=q))
+    return render(request, 'blog/index.html', {'article_list': article_list})

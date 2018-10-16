@@ -3,13 +3,28 @@
 {% block page_title %}{{ article.title }}{% endblock %}
 {% block main %}
   <div class="text-center margin-tb-1">
-  {{ article.author }} {{ article.created_time }} 阅读({{ article.views }}) 评论({{ article.comment_set.count }})
+    {{ article.author }} {{ article.created_time }} 阅读({{ article.views }}) 评论({{ article.comment_set.count }})
   </div>
   <article>
     {{ article.md_content | safe }}
   </article>
-   <hr/>
-  <div>
-  <h5>评论列表, 共{{ article.comment_set.count }}条评论</h5>
+  <div id="coment" class="margin-tb-2">
+    <h5>
+      留言 ({{ article.comment_set.count }}条)
+      <a href="{% url 'blog:comment' article.pk %}" class="font-size-10">我要留言</a>
+    </h5>
+    <hr/>
+    <ul class="no-padding-left">
+      {% for comment in article.comment_set.all %}
+        <li class="comment margin-tb-1">
+          <span class="font-size-8">{{ comment.user }} {{ comment.created_time }}说：</span>
+          <div class="text">
+            {{ comment }}
+          </div>
+        </li>
+      {% empty %}
+        暂无评论
+      {% endfor %}
+    </ul>
   </div>
 {% endblock %}
