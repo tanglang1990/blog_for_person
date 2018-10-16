@@ -1,63 +1,94 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy, reverse
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView, DetailView, FormView
 
 from blog.forms import CommentForm
 from blog.models import Article
 
 
-def index(request):
-    page = request.GET.get('page')
-    article_list = Article.objects.all()
-    paginator = Paginator(article_list, settings.PER_PAGE)
-    article_list = paginator.get_page(page)
-    context = {'article_list': article_list, 'title': settings.TITLE}
-    return render(request, 'blog/index.html', context=context)
+class IndexView(ListView):
+    model = Article
+    template_name = 'blog/index.html'
+    context_object_name = 'article_list'
+    paginate_by = settings.PER_PAGE
 
 
-def detail(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    article.increase_views()
-    return render(request, 'blog/detail.html', context={'article': article})
+class PostDetailView(DetailView):
+    model = Article
+    template_name = 'blog/detail.html'
+    context_object_name = 'article'
+
+    def get(self, request, *args, **kwargs):
+        response = super(PostDetailView, self).get(request, *args, **kwargs)
+        self.object.increase_views()
+        return response
 
 
-@login_required
-def comment(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            form.instance.article = article
-            form.instance.user = request.user
-            form.save()
-            return redirect(article)
-    else:
-        form = CommentForm()
-    return render(
-        request, 'users/base_form.html', {'title': f'{article.title}-留言', 'form': form})
+class CommentView(FormView):
+    form_class = CommentForm
+    success_url = reverse_lazy('users:success')
+    template_name = 'users/base_form.html'
+    title = 'Password change'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        article = self.get_article()
+        setattr(self, 'title', f'{article.title}-留言')
+        return super().dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context_data = super(CommentView, self).get_context_data(**kwargs)
+        article = self.get_article()
+        context_data.update({'title': f'{article.title}-留言'})
+        return context_data
+
+    def get_article(self):
+        try:
+            article = self.article
+        except AttributeError:
+            pk = self.kwargs.get('pk')
+            article = get_object_or_404(Article, pk=pk)
+            setattr(self, 'article', article)
+        return article
+
+    def form_valid(self, form):
+        form = self.get_form()
+        form.instance.user = self.request.user
+        form.instance.article = self.get_article()
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('blog:detail', kwargs={'pk': self.kwargs.get('pk')})
 
 
-def search(request):
-    q = request.GET.get('q')
-    article_list = Article.objects.filter(
-        Q(title__icontains=q) | Q(content__icontains=q) | Q(excerpt__icontains=q))
-    return render(request, 'blog/index.html', {'article_list': article_list})
+class SearchView(IndexView):
+    def get_queryset(self):
+        q = self.request.GET.get('q', '')
+        return super(SearchView, self).get_queryset().filter(
+            Q(title__icontains=q) | Q(content__icontains=q) | Q(excerpt__icontains=q))
 
 
-def archive(request, year, month):
-    article_list = Article.objects.filter(
-        created_time__year=year, created_time__month=month
-    )
-    return render(request, 'blog/index.html', context={'article_list': article_list})
+class ArchiveView(IndexView):
+    def get_queryset(self):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        return super(ArchiveView, self).get_queryset().filter(
+            created_time__year=year, created_time__month=month
+        )
 
 
-def category(request, pk):
-    article_list = Article.objects.filter(category__pk=pk)
-    return render(request, 'blog/index.html', context={'article_list': article_list})
+class CategoryView(IndexView):
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        return super(CategoryView, self).get_queryset().filter(category__pk=pk)
 
 
-def tag(request, pk):
-    article_list = Article.objects.filter(tags__pk=pk)
-    return render(request, 'blog/index.html', context={'article_list': article_list})
+class TagView(IndexView):
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        return super(TagView, self).get_queryset().filter(tags__pk=pk)
