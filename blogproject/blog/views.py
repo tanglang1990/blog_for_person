@@ -44,3 +44,20 @@ def search(request):
     article_list = Article.objects.filter(
         Q(title__icontains=q) | Q(content__icontains=q) | Q(excerpt__icontains=q))
     return render(request, 'blog/index.html', {'article_list': article_list})
+
+
+def archive(request, year, month):
+    article_list = Article.objects.filter(
+        created_time__year=year, created_time__month=month
+    )
+    return render(request, 'blog/index.html', context={'article_list': article_list})
+
+
+def category(request, pk):
+    article_list = Article.objects.filter(category__pk=pk)
+    return render(request, 'blog/index.html', context={'article_list': article_list})
+
+
+def tag(request, pk):
+    article_list = Article.objects.filter(tags__pk=pk)
+    return render(request, 'blog/index.html', context={'article_list': article_list})

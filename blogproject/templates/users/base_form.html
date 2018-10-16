@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Ten老师的网络日志-{{ title }}{% endblock %}
+{% block title %}{{ TITLE }}-{{ title }}{% endblock %}
 {% block page_title %}{{ title }}{% endblock %}
 {% block main %}
   <div class="container">
@@ -23,7 +23,7 @@
             {% endif %}
           </div>
         {% endfor %}
-        <button type="submit" class="btn btn-default col-12">提交</button>
+        <button type="submit" class="btn btn-info col-12">提交</button>
       </form>
     </div>
   </div>

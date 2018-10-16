@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>{% block title %}{% endblock %}</title>
+  <title>{% block title %}{{ TITLE }}{% endblock %}</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -14,16 +14,16 @@
 <header class="container">
   <div class="row margin-tb-2">
     <div class="col-md-8 col-sm-7 col-xs-4">
-      <h1>{% block page_title %}<a href="/">首页</a>{% endblock %}</h1>
+      <h1>{% block page_title %}<a href="/">{{ TITLE }}</a>{% endblock %}</h1>
     </div>
     <div class="col-md-4 col-sm-5 col-xs-8">
       <div>
+        {% if user.is_authenticated %}欢迎您,{{ user }}  | {% endif %}
+        <a href="/">首页</a> | <a href="/admin" target="_blank">CMS</a> |
         {% if user.is_authenticated %}
-          欢迎您,{{ user }} | <a href="/">首页</a> | <a href="/admin" target="_blank">CMS</a> |
           <a href="{% url 'users:logout' %}">注销</a> |
           <a href="{% url 'users:password_change' %}">重置密码</a>
         {% else %}
-          <a href="/">首页</a> | <a href="/admin" target="_blank">CMS</a> |
           <a href="{% url 'users:register' %}">注册</a> |
           <a href="{% url 'users:login' %}">登录</a>
         {% endif %}
@@ -64,7 +64,7 @@
           {% get_archives as archives %}
           {% for archive in archives %}
             <li>
-              <a href="#">{{ archive.year }} 年 {{ archive.month }} 月</a>
+              <a href="{% url 'blog:archive' archive.year archive.month %}">{{ archive.year }} 年 {{ archive.month }} 月</a>
             </li>
           {% empty %}
             暂无归档！
@@ -77,7 +77,7 @@
           {% get_categories as categories %}
           {% for category in categories %}
           <li>
-            <a href="#">{{ category.name }} ({{ category.num_articles }})</a>
+            <a href="{% url 'blog:category' category.pk %}">{{ category.name }} ({{ category.num_articles }})</a>
           </li>
           {% empty %}
             暂无分类！
@@ -90,7 +90,7 @@
           {% get_tags as tags %}
           {% for tag in tags %}
           <li>
-            <a href="#">{{ tag }} ({{ tag.num_articles }})</a>
+            <a href="{% url 'blog:tag' tag.pk %}">{{ tag }} ({{ tag.num_articles }})</a>
           </li>
           {% endfor %}
         </ul>
@@ -104,7 +104,7 @@
 <footer class="container">
   <div class="row">
     <div class="col-md-12 text-center margin-tb-1">
-      <a href="https://www.dongnaoedu.com/"> &copy 2018 dongnaoedu.com</a>
+      <a href="https://www.dongnaoedu.com/" target="_blank"> &copy 2018 dongnaoedu.com</a>
     </div>
   </div>
 </footer>
