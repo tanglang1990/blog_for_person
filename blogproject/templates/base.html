@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="/static/css/bootstrap.min.css">
   <link rel="stylesheet" href="/static/css/highlights/github.css">
   <link rel="stylesheet" href="/static/css/style.css">
-
 </head>
 <body>
 <header class="container">
@@ -17,7 +16,14 @@
     </div>
     <div class="col-md-4 col-sm-5 col-xs-8">
       <div>
-        <a href="/">首页</a> | <a href="#">注册</a> | <a href="#">登录</a>
+
+        {% if user.is_authenticated %}
+          欢迎您,{{ user }}  | <a href="/">首页</a> | <a href="{% url 'users:logout' %}">注销</a> |
+          <a href="{% url 'users:password_change' %}">重置密码</a>
+        {% else %}
+          <a href="/">首页</a> | <a href="{% url 'users:register' %}">注册</a> |
+          <a href="{% url 'users:login' %}">登录</a>
+        {% endif %}
       </div>
       <div class="search-form">
         <form role="search" action="#">

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Ten老师的网络日志-{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block main %}
+  <div class="container">
+    <div class="row">
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+          <p class="errornote">
+            {{ error }}
+          </p>
+        {% endfor %}
+      {% endif %}
+      <form class="input-form col-11" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="form-group">
+            <label>{% if field.field.required %}<em class="red-text">*</em>{% endif %} {{ field.label }}</label>
+            {{ field }}
+            {{ field.errors }}
+            {% if field.help_text %}
+              <small class="help_text text-muted">{{ field.help_text|safe }}</small>
+            {% endif %}
+          </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-default col-12">提交</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

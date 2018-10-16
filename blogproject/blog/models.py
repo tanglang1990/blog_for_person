@@ -1,15 +1,8 @@
 import markdown
-from django.contrib.auth.models import AbstractUser
+from users.models import User
 from django.db import models
 from django.db.models import CASCADE
 from django.utils.html import strip_tags
-
-
-class User(AbstractUser):
-    nickname = models.CharField(max_length=32, verbose_name='昵称')
-
-    class Meta(AbstractUser.Meta):
-        pass
 
 
 class Category(models.Model):
