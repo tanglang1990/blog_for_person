@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'blog',
 ]
 
+from django.middleware.security import SecurityMiddleware
+from django.middleware.clickjacking import XFrameOptionsMiddleware
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -131,7 +134,7 @@ STATICFILES_DIRS = [
 
 AUTH_USER_MODEL = 'users.User'
 
-TITLE = 'Ten老师的网络日志'
+TITLE = 'Ten的网络日志'
 
 PER_PAGE = 2
 
